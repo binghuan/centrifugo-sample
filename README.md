@@ -4,7 +4,7 @@
 - [Centrifugo Sample](#centrifugo-sample)
   - [Features](#features)
   - [Getting Started](#getting-started)
-  - [Reference](#reference)
+  - [References](#references)
   - [Configuration](#configuration)
     - [Generate Config](#generate-config)
     - [Extra Settings](#extra-settings)
@@ -20,17 +20,17 @@ Centrifugo Sample
 A simple React app demonstrating real-time communication with Centrifugo using WebSockets. The app allows users to connect to a Centrifugo server, publish messages, and receive real-time updates with timestamps.
 
 ## Features
-* Connect to a Centrifugo server using a WebSocket URL and token
+- Connect to a Centrifugo server using a WebSocket URL and token
 Publish messages to a specified channel
-* Receive and display real-time messages with timestamps
+- Receive and display real-time messages with timestamps
 ## Getting Started
-* Generate and configure your Centrifugo server
-* Launch the React client
-* Send and receive real-time messages
+- Generate and configure your Centrifugo server
+- Launch the React client
+- Send and receive real-time messages
 
-## Reference
-[Centrifuge Java](https://github.com/centrifugal/centrifuge-java)
-
+## References
+- [Centrifuge Java](https://github.com/centrifugal/centrifuge-java)  
+- [centrifuge-swift](https://github.com/centrifugal/centrifuge-swift)
 ## Configuration
 
 ### Generate Config
