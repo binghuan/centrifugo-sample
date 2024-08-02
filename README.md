@@ -13,6 +13,7 @@
   - [Launch Web Client](#launch-web-client)
   - [Demo Web Client](#demo-web-client)
   - [How to launch iOS app](#how-to-launch-ios-app)
+  - [Demo iOS Client](#demo-ios-client)
 
 
 # Centrifugo Sample
@@ -74,4 +75,6 @@ yarn start
 - Add package dependencies "centrifuge-swift"
 - Open `iOS-client` in Xcode
 - Run the app on a simulator or device
-```
+
+## Demo iOS Client
+![](./README/demo_ios.png)
