@@ -31,6 +31,7 @@ Publish messages to a specified channel
 ## References
 - [Centrifuge Java](https://github.com/centrifugal/centrifuge-java)  
 - [centrifuge-swift](https://github.com/centrifugal/centrifuge-swift)
+- [Client SDK API](https://centrifugal.dev/docs/transports/client_api)
 ## Configuration
 
 ### Generate Config
