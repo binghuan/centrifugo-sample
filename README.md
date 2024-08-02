@@ -11,7 +11,8 @@
   - [Start Centrifugo Server](#start-centrifugo-server)
   - [Generate Token](#generate-token)
   - [Launch Web Client](#launch-web-client)
-  - [Demo](#demo)
+  - [Demo Web Client](#demo-web-client)
+  - [How to launch iOS app](#how-to-launch-ios-app)
 
 
 # Centrifugo Sample
@@ -66,7 +67,11 @@ yarn install
 yarn start
 ```
 
-This address should be used in your client configuration to connect to the Centrifugo server.
-
-## Demo 
+## Demo Web Client
 ![](./README/demo.png)
+
+## How to launch iOS app
+- Add package dependencies "centrifuge-swift"
+- Open `iOS-client` in Xcode
+- Run the app on a simulator or device
+```
