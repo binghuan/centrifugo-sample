@@ -1,6 +1,15 @@
 {
-  "originHash" : "08990424fc17d9f95f6d43c4b28f1ae2805fd9bf549ac5e920c030dbb3d944a0",
+  "originHash" : "5409f250d072440e89830379e0237c82d6346c9a37da0e453218cf606c4cee24",
   "pins" : [
+    {
+      "identity" : "centrifuge-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/centrifugal/centrifuge-swift",
+      "state" : {
+        "revision" : "b3ed837ecb6f26dcaeda065cec559227fd57d01a",
+        "version" : "0.7.2"
+      }
+    },
     {
       "identity" : "swift-protobuf",
       "kind" : "remoteSourceControl",

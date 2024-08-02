@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,8 +14,8 @@
 		0776E4922C5C1A3900879EFF /* iOS_clientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0776E4912C5C1A3900879EFF /* iOS_clientTests.swift */; };
 		0776E49C2C5C1A3900879EFF /* iOS_clientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0776E49B2C5C1A3900879EFF /* iOS_clientUITests.swift */; };
 		0776E49E2C5C1A3900879EFF /* iOS_clientUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0776E49D2C5C1A3900879EFF /* iOS_clientUITestsLaunchTests.swift */; };
-		0776E4AD2C5C1AAE00879EFF /* SwiftCentrifuge in Frameworks */ = {isa = PBXBuildFile; productRef = 0776E4AC2C5C1AAE00879EFF /* SwiftCentrifuge */; };
 		0776E4AF2C5C1ACE00879EFF /* CentrifugoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0776E4AE2C5C1ACE00879EFF /* CentrifugoViewModel.swift */; };
+		0792DC172C5CBE4A00891DD4 /* SwiftCentrifuge in Frameworks */ = {isa = PBXBuildFile; productRef = 0792DC162C5CBE4A00891DD4 /* SwiftCentrifuge */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0776E4AD2C5C1AAE00879EFF /* SwiftCentrifuge in Frameworks */,
+				0792DC172C5CBE4A00891DD4 /* SwiftCentrifuge in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,7 +157,7 @@
 			);
 			name = "iOS-client";
 			packageProductDependencies = (
-				0776E4AC2C5C1AAE00879EFF /* SwiftCentrifuge */,
+				0792DC162C5CBE4A00891DD4 /* SwiftCentrifuge */,
 			);
 			productName = "iOS-client";
 			productReference = 0776E47D2C5C1A3700879EFF /* iOS-client.app */;
@@ -232,7 +232,7 @@
 			);
 			mainGroup = 0776E4742C5C1A3700879EFF;
 			packageReferences = (
-				0776E4AA2C5C1A8400879EFF /* XCLocalSwiftPackageReference "centrifuge-swift" */,
+				0792DC152C5CBE0C00891DD4 /* XCRemoteSwiftPackageReference "centrifuge-swift" */,
 			);
 			productRefGroup = 0776E47E2C5C1A3700879EFF /* Products */;
 			projectDirPath = "";
@@ -609,17 +609,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		0776E4AA2C5C1A8400879EFF /* XCLocalSwiftPackageReference "centrifuge-swift" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "centrifuge-swift";
+/* Begin XCRemoteSwiftPackageReference section */
+		0792DC152C5CBE0C00891DD4 /* XCRemoteSwiftPackageReference "centrifuge-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/centrifugal/centrifuge-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.2;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0776E4AC2C5C1AAE00879EFF /* SwiftCentrifuge */ = {
+		0792DC162C5CBE4A00891DD4 /* SwiftCentrifuge */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0776E4AA2C5C1A8400879EFF /* XCLocalSwiftPackageReference "centrifuge-swift" */;
+			package = 0792DC152C5CBE0C00891DD4 /* XCRemoteSwiftPackageReference "centrifuge-swift" */;
 			productName = SwiftCentrifuge;
 		};
 /* End XCSwiftPackageProductDependency section */
