@@ -72,8 +72,8 @@ yarn start
 ![](./README/demo.png)
 
 ## How to launch iOS app
-- Add package dependencies "centrifuge-swift"
 - Open `iOS-client` in Xcode
+- Add package dependencies "centrifuge-swift"
 - Run the app on a simulator or device
 
 ## Demo iOS Client
