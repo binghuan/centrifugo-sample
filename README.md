@@ -10,6 +10,7 @@
     - [Extra Settings](#extra-settings)
   - [Start Centrifugo Server](#start-centrifugo-server)
   - [Generate Token](#generate-token)
+  - [Generate subscription token for channel](#generate-subscription-token-for-channel)
   - [Launch Web Client](#launch-web-client)
   - [Demo Web Client](#demo-web-client)
   - [How to launch iOS app](#how-to-launch-ios-app)
@@ -48,6 +49,22 @@ Add the following line to your `config.json` to allow client subscriptions:
 "allow_subscribe_for_client": true
 ```
 
+reference: https://centrifugal.dev/docs/server/configuration#configuration-file  
+
+Configure Centrifugo to allow publishing to channels:
+```json
+  "namespaces": [
+    {
+      "name": "public",
+      "publish": true,
+      "channel_options": {
+        "test": {
+          "publish": true
+        }
+      }
+    }
+  ]
+```
 ## Start Centrifugo Server
 Start the Centrifugo server with the specified configuration and debug log level:
 ```shell
@@ -58,6 +75,11 @@ centrifugo --config=config.json --log_level=debug
 Generate a token for a user (e.g., `testuser`):
 ```shell
 centrifugo gentoken -u testuser
+```
+
+## Generate subscription token for channel 
+```shell
+    centrifugo gensubtoken -s public:test -u testuser
 ```
 
 ## Launch Web Client

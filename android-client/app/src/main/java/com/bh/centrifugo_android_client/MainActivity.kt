@@ -33,18 +33,25 @@ class MainActivity : AppCompatActivity() {
             )
         )
         binding.tokenInput.setText(sharedPreferences.getString("token", ""))
+        binding.subTokenInput.setText(
+            sharedPreferences.getString(
+                "subToken", ""
+            )
+        )
         binding.channelInput.setText(sharedPreferences.getString("channel", ""))
 
         binding.saveButton.setOnClickListener {
             val wsAddress = binding.wsAddressInput.text.toString().trim()
             val token = binding.tokenInput.text.toString().trim()
             val channel = binding.channelInput.text.toString().trim()
+            val subToken = binding.subTokenInput.text.toString().trim()
 
             if (wsAddress.isNotEmpty() && token.isNotEmpty()) {
                 val editor = sharedPreferences.edit()
                 editor.putString("wsAddress", wsAddress)
                 editor.putString("token", token)
                 editor.putString("channel", channel)
+                editor.putString("subToken", subToken)
                 editor.apply()
                 binding.connectionStatus.text =
                     getString(R.string.settings_saved)
@@ -66,23 +73,29 @@ class MainActivity : AppCompatActivity() {
                 binding.connectionStatus.text =
                     getString(R.string.websocket_address_and_token_required)
             }
+
+            dismissIME()
         }
 
         binding.subscribeButton.setOnClickListener {
             val channel = binding.channelInput.text.toString().trim()
+            val subToken = binding.subTokenInput.text.toString().trim()
             if (channel.isNotEmpty()) {
-                wsManager?.subscribe(channel)
+                wsManager?.subscribe(channel, subToken)
             }
 
-            // dismiss IME
-            val imm =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.channelInput.windowToken, 0)
+            dismissIME()
         }
 
         binding.sendButton.setOnClickListener {
             wsManager?.publishMessage("public:test", "hello, I'm user 1")
         }
+    }
+
+    private fun dismissIME() {
+        val imm =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.channelInput.windowToken, 0)
     }
 
     private fun setupWebSocketManager(wsAddress: String, token: String) {

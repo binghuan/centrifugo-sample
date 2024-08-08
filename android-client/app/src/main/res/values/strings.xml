@@ -12,4 +12,5 @@
     <string name="settings_saved">Settings saved</string>
     <string name="websocket_address_and_token_required">WebSocket Address and Token required</string>
     <string name="connecting">Connecting...</string>
+    <string name="subtoken">Subtoken</string>
 </resources>

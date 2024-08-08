@@ -71,15 +71,16 @@ class CentrifugoWsManager(
         client.disconnect()
     }
 
-    fun subscribe(channel: String) {
+    fun subscribe(channel: String, subToken: String) {
         if (subscriptions.containsKey(channel)) {
             messageListener?.invoke("[${getCurrentTimestamp()}] Already subscribed to $channel")
             return
         }
 
-        val subscription = client.newSubscription(
-            channel,
-            object : SubscriptionEventListener() {
+        val subscription =
+            client.newSubscription(channel, SubscriptionOptions().apply {
+                token = subToken
+            }, object : SubscriptionEventListener() {
                 override fun onSubscribing(
                     sub: Subscription?, event: SubscribingEvent?
                 ) {
