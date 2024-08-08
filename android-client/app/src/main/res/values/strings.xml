@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">centrifugo-android-client</string>
+    <string name="centrifugo_android_client">Centrifugo Android Client</string>
+    <string name="websocket_url">WebSocket URL</string>
+    <string name="token">Token</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="connect">Connect</string>
+    <string name="channel">Channel</string>
+    <string name="subscribe_to_channel">Subscribe to Channel</string>
+    <string name="send_test_message">Send Test Message</string>
+    <string name="status_disconnected">Status: Disconnected</string>
+    <string name="settings_saved">Settings saved</string>
+    <string name="websocket_address_and_token_required">WebSocket Address and Token required</string>
+    <string name="connecting">Connecting...</string>
 </resources>

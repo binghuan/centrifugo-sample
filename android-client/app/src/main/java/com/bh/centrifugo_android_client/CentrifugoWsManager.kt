@@ -77,7 +77,8 @@ class CentrifugoWsManager(
             return
         }
 
-        val subscription = client.newSubscription(channel,
+        val subscription = client.newSubscription(
+            channel,
             object : SubscriptionEventListener() {
                 override fun onSubscribing(
                     sub: Subscription?, event: SubscribingEvent?

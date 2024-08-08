@@ -3,13 +3,10 @@ package com.bh.centrifugo_android_client
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import com.bh.centrifugo_android_client.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -49,10 +46,11 @@ class MainActivity : AppCompatActivity() {
                 editor.putString("token", token)
                 editor.putString("channel", channel)
                 editor.apply()
-                binding.connectionStatus.text = "Settings saved"
+                binding.connectionStatus.text =
+                    getString(R.string.settings_saved)
             } else {
                 binding.connectionStatus.text =
-                    "WebSocket Address and Token required"
+                    getString(R.string.websocket_address_and_token_required)
             }
         }
 
@@ -61,12 +59,12 @@ class MainActivity : AppCompatActivity() {
             val token = binding.tokenInput.text.toString().trim()
 
             if (wsAddress.isNotEmpty() && token.isNotEmpty()) {
-                binding.connectionStatus.text = "Connecting..."
+                binding.connectionStatus.text = getString(R.string.connecting)
                 setupWebSocketManager(wsAddress, token)
                 wsManager?.connect()
             } else {
                 binding.connectionStatus.text =
-                    "WebSocket Address and Token required"
+                    getString(R.string.websocket_address_and_token_required)
             }
         }
 
@@ -101,14 +99,6 @@ class MainActivity : AppCompatActivity() {
                 binding.messagesView.text = "$message\n$currentMessages"
             }
         }
-    }
-
-    private fun showClearButton(
-        editText: AppCompatEditText, show: Boolean
-    ) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(
-            null, null, if (show) clearDrawable else null, null
-        )
     }
 
     override fun onDestroy() {

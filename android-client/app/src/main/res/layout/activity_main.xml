@@ -14,14 +14,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="16dp"
-        android:text="Centrifugo Android Client"
+        android:text="@string/centrifugo_android_client"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="WebSocket URL"
+        android:hint="@string/websocket_url"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Token"
+        android:hint="@string/token"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -61,7 +61,7 @@
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:padding="12dp"
-            android:text="Save Settings" />
+            android:text="@string/save_settings" />
 
         <Button
             android:id="@+id/connectButton"
@@ -70,7 +70,7 @@
             android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:padding="12dp"
-            android:text="Connect" />
+            android:text="@string/connect" />
     </LinearLayout>
 
     <LinearLayout
@@ -79,11 +79,11 @@
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:hint="Channel"
+            android:hint="@string/channel"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:padding="12dp"
-            android:text="Subscribe to Channel" />
+            android:text="@string/subscribe_to_channel" />
 
     </LinearLayout>
 
@@ -115,14 +115,14 @@
         android:layout_marginTop="16dp"
         android:enabled="false"
         android:padding="12dp"
-        android:text="Send Test Message" />
+        android:text="@string/send_test_message" />
 
     <TextView
         android:id="@+id/connectionStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Status: Disconnected"
+        android:text="@string/status_disconnected"
         android:textSize="16sp" />
 
     <ScrollView
