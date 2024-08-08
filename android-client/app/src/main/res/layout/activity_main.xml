@@ -18,22 +18,34 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/wsAddressInput"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="WebSocket URL"
-        android:inputType="textUri"
-        android:padding="8dp" />
+        app:endIconMode="clear_text">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/tokenInput"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/wsAddressInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:padding="8dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Token"
-        android:inputType="textPassword"
-        android:padding="8dp" />
+        app:endIconMode="clear_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tokenInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:padding="8dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,15 +78,24 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/channelInput"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:hint="Channel"
-            android:inputType="text"
-            android:padding="8dp" />
+            app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/channelInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:padding="8dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/subscribeButton"

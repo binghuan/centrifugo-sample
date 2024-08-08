@@ -53,4 +53,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.centrifuge.android)
     implementation(libs.centrifuge.java) // Ensure you use the latest version
+    implementation(libs.material.v180)
+
 }

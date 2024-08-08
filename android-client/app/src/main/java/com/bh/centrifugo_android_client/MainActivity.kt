@@ -27,10 +27,6 @@ class MainActivity : AppCompatActivity() {
             this, android.R.drawable.ic_menu_close_clear_cancel
         )!!
 
-        setupClearButton(binding.wsAddressInput)
-        setupClearButton(binding.tokenInput)
-        setupClearButton(binding.channelInput)
-
         val sharedPreferences =
             getSharedPreferences("WebSocketPrefs", Context.MODE_PRIVATE)
         binding.wsAddressInput.setText(
@@ -104,34 +100,6 @@ class MainActivity : AppCompatActivity() {
                 val currentMessages = binding.messagesView.text.toString()
                 binding.messagesView.text = "$message\n$currentMessages"
             }
-        }
-    }
-
-    private fun setupClearButton(editText: AppCompatEditText) {
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?, start: Int, count: Int, after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                showClearButton(editText, s?.isNotEmpty() == true)
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        editText.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= (editText.right - editText.compoundPaddingEnd)) {
-                    editText.text?.clear()
-                    showClearButton(editText, false)
-                    return@setOnTouchListener true
-                }
-            }
-            false
         }
     }
 
