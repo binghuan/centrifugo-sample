@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupWebSocketManager(wsAddress: String, token: String) {
+        wsManager?.disconnect()
         wsManager = CentrifugoWsManager(wsAddress, token)
         wsManager?.setStatusListener { status ->
             runOnUiThread {
