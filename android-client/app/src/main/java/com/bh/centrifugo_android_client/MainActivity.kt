@@ -5,9 +5,10 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.bh.centrifugo_android_client.databinding.ActivityMainBinding
+import com.bh.centrifugo_android_client.vo.RtmChannelMsg
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
@@ -88,8 +89,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.sendButton.setOnClickListener {
-            wsManager?.publishMessage("public:test", "hello, I'm user 1")
+            val msg = composeMessage()
+            wsManager?.publishMessage("public:test", msg)
         }
+    }
+
+    private fun composeMessage(): String {
+        val rtmChannelMsg = RtmChannelMsg(
+            account = "+12345678901",
+            id = "+12345678901",
+            name = "User 1",
+            timestamp = System.currentTimeMillis(),
+            text = "hello, I am user 1",
+            type = MeetingConstants.MEETING_ROOM_COMMAND_TEXT,
+        )
+
+        val gson = Gson()
+        val jsonString = gson.toJson(rtmChannelMsg)
+
+        return jsonString
     }
 
     private fun dismissIME() {
@@ -100,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupWebSocketManager(wsAddress: String, token: String) {
         wsManager?.disconnect()
-        wsManager = CentrifugoWsManager(wsAddress, token)
+        wsManager = CentrifugoWsManager.getInstance(wsAddress, token)
         wsManager?.setStatusListener { status ->
             runOnUiThread {
                 binding.connectionStatus.text = status
