@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CentrifugoWsManager(
+class CentrifugoWsManager private constructor(
     private val wsAddress: String, private val token: String
 ) {
     private lateinit var client: Client
@@ -16,21 +16,23 @@ class CentrifugoWsManager(
     private var statusListener: ((String) -> Unit)? = null
     private var messageListener: ((String) -> Unit)? = null
 
-    fun setStatusListener(listener: (String) -> Unit) {
-        statusListener = listener
+    init {
+        initClient()
     }
 
-    fun setMessageListener(listener: (String) -> Unit) {
-        messageListener = listener
+    companion object {
+        @Volatile
+        private var INSTANCE: CentrifugoWsManager? = null
+
+        fun getInstance(wsAddress: String, token: String): CentrifugoWsManager =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: CentrifugoWsManager(wsAddress, token).also { INSTANCE = it }
+            }
+
+        fun getClient(): Client? = INSTANCE?.client
     }
 
-    private fun getCurrentTimestamp(): String {
-        val dateFormat =
-            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        return dateFormat.format(Date())
-    }
-
-    fun connect() {
+    private fun initClient() {
         val options = Options()
         options.token = token
 
@@ -63,12 +65,22 @@ class CentrifugoWsManager(
                 statusListener?.invoke("[${getCurrentTimestamp()}] $message")
             }
         })
+    }
 
+    fun connect() {
         client.connect()
     }
 
     fun disconnect() {
         client.disconnect()
+    }
+
+    fun setStatusListener(listener: (String) -> Unit) {
+        statusListener = listener
+    }
+
+    fun setMessageListener(listener: (String) -> Unit) {
+        messageListener = listener
     }
 
     fun subscribe(channel: String, subToken: String) {
@@ -148,5 +160,11 @@ class CentrifugoWsManager(
                 messageListener?.invoke("[${getCurrentTimestamp()}] $successMessage")
             }
         }
+    }
+
+    private fun getCurrentTimestamp(): String {
+        val dateFormat =
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 }
