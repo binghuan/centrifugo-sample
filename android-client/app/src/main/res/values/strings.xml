@@ -6,7 +6,8 @@
     <string name="save_settings">Save Settings</string>
     <string name="connect">Connect</string>
     <string name="channel">Channel</string>
-    <string name="subscribe_to_channel">Subscribe to Channel</string>
+    <string name="subscribe_to_channel">Subscribe</string>
+    <string name="unsubscribe_to_channel">Unsubscribe</string>
     <string name="send_test_message">Send Test Message</string>
     <string name="status_disconnected">Status: Disconnected</string>
     <string name="settings_saved">Settings saved</string>

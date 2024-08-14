@@ -88,6 +88,14 @@ class MainActivity : AppCompatActivity() {
             dismissIME()
         }
 
+        binding.unsubscribeButton.setOnClickListener {
+            val channel = binding.channelInput.text.toString().trim()
+            if (channel.isNotEmpty()) {
+                wsManager?.unsubscribe(channel)
+            }
+            dismissIME()
+        }
+
         binding.sendButton.setOnClickListener {
             val msg = composeMessage()
             wsManager?.publishMessage("public:test", msg)

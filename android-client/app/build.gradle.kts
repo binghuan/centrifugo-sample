@@ -51,8 +51,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.java.websocket)
     implementation(libs.gson)
-    implementation(libs.centrifuge.android)
-    implementation(libs.centrifuge.java) // Ensure you use the latest version
+    implementation(libs.centrifuge.java)
     implementation(libs.material.v180)
 
 }

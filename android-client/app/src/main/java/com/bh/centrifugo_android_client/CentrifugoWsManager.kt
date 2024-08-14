@@ -26,7 +26,9 @@ class CentrifugoWsManager private constructor(
 
         fun getInstance(wsAddress: String, token: String): CentrifugoWsManager =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: CentrifugoWsManager(wsAddress, token).also { INSTANCE = it }
+                INSTANCE ?: CentrifugoWsManager(
+                    wsAddress, token
+                ).also { INSTANCE = it }
             }
 
         fun getClient(): Client? = INSTANCE?.client
@@ -139,6 +141,17 @@ class CentrifugoWsManager private constructor(
             })
         subscription.subscribe()
         subscriptions[channel] = subscription
+    }
+
+    fun unsubscribe(channel: String) {
+        val subscription = subscriptions[channel]
+        if (subscription != null) {
+            subscription.unsubscribe()
+            subscriptions.remove(channel)
+            client.removeSubscription(subscription)
+        } else {
+            messageListener?.invoke("[${getCurrentTimestamp()}] Not subscribed to channel $channel")
+        }
     }
 
     fun publishMessage(channel: String, message: String) {
