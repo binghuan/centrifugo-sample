@@ -10,7 +10,7 @@ import com.bh.centrifugo_android_client.databinding.ActivityMainBinding
 import com.bh.centrifugo_android_client.vo.RtmChannelMsg
 import com.google.gson.Gson
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RtmChatView.OnSendMessageListener {
 
     private lateinit var binding: ActivityMainBinding
     private var wsManager: CentrifugoWsManager? = null
@@ -96,19 +96,16 @@ class MainActivity : AppCompatActivity() {
             dismissIME()
         }
 
-        binding.sendButton.setOnClickListener {
-            val msg = composeMessage()
-            wsManager?.publishMessage("public:test", msg)
-        }
+        binding.chatView.setOnSendMessageListener(this)
     }
 
-    private fun composeMessage(): String {
+    private fun composeMessage(text: String): String {
         val rtmChannelMsg = RtmChannelMsg(
             account = "+12345678901",
             id = "+12345678901",
             name = "User 1",
             timestamp = System.currentTimeMillis(),
-            text = "hello, I am user 1",
+            text = text,
             type = MeetingConstants.MEETING_ROOM_COMMAND_TEXT,
         )
 
@@ -130,13 +127,11 @@ class MainActivity : AppCompatActivity() {
         wsManager?.setStatusListener { status ->
             runOnUiThread {
                 binding.connectionStatus.text = status
-                binding.sendButton.isEnabled = status.contains("Connected")
             }
         }
         wsManager?.setMessageListener { message ->
             runOnUiThread {
-                val currentMessages = binding.messagesView.text.toString()
-                binding.messagesView.text = "$message\n$currentMessages"
+                binding.chatView.pushMessage(message = message.text)
             }
         }
     }
@@ -144,5 +139,10 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         wsManager?.disconnect()
+    }
+
+    override fun onSendMessage(message: String) {
+        val msg = composeMessage(message)
+        wsManager?.publishMessage("public:test", msg)
     }
 }

@@ -1,7 +1,22 @@
 package com.bh.centrifugo_android_client
 
 import android.util.Log
-import io.github.centrifugal.centrifuge.*
+import com.bh.centrifugo_android_client.vo.RtmChannelMsg
+import io.github.centrifugal.centrifuge.Client
+import io.github.centrifugal.centrifuge.ConnectedEvent
+import io.github.centrifugal.centrifuge.ConnectingEvent
+import io.github.centrifugal.centrifuge.DisconnectedEvent
+import io.github.centrifugal.centrifuge.ErrorEvent
+import io.github.centrifugal.centrifuge.EventListener
+import io.github.centrifugal.centrifuge.Options
+import io.github.centrifugal.centrifuge.PublicationEvent
+import io.github.centrifugal.centrifuge.SubscribedEvent
+import io.github.centrifugal.centrifuge.SubscribingEvent
+import io.github.centrifugal.centrifuge.Subscription
+import io.github.centrifugal.centrifuge.SubscriptionErrorEvent
+import io.github.centrifugal.centrifuge.SubscriptionEventListener
+import io.github.centrifugal.centrifuge.SubscriptionOptions
+import io.github.centrifugal.centrifuge.UnsubscribedEvent
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -14,7 +29,7 @@ class CentrifugoWsManager private constructor(
     private val subscriptions = mutableMapOf<String, Subscription>()
 
     private var statusListener: ((String) -> Unit)? = null
-    private var messageListener: ((String) -> Unit)? = null
+    private var messageListener: ((RtmChannelMsg) -> Unit)? = null
 
     init {
         initClient()
@@ -81,13 +96,14 @@ class CentrifugoWsManager private constructor(
         statusListener = listener
     }
 
-    fun setMessageListener(listener: (String) -> Unit) {
+    fun setMessageListener(listener: (RtmChannelMsg) -> Unit) {
         messageListener = listener
     }
 
     fun subscribe(channel: String, subToken: String) {
         if (subscriptions.containsKey(channel)) {
-            messageListener?.invoke("[${getCurrentTimestamp()}] Already subscribed to $channel")
+            val message = "Already subscribed to $channel"
+            showMessage("[${getCurrentTimestamp()}] $message")
             return
         }
 
@@ -100,7 +116,7 @@ class CentrifugoWsManager private constructor(
                 ) {
                     val message = "Subscribing to channel: ${sub?.channel}"
                     Log.d("Centrifuge", message)
-                    messageListener?.invoke("[${getCurrentTimestamp()}] $message")
+                    showMessage("[${getCurrentTimestamp()}] $message")
                 }
 
                 override fun onSubscribed(
@@ -108,7 +124,7 @@ class CentrifugoWsManager private constructor(
                 ) {
                     val message = "Subscribed to channel: ${sub?.channel}"
                     Log.d("Centrifuge", message)
-                    messageListener?.invoke("[${getCurrentTimestamp()}] $message")
+                    showMessage("[${getCurrentTimestamp()}] $message")
                 }
 
                 override fun onUnsubscribed(
@@ -116,7 +132,7 @@ class CentrifugoWsManager private constructor(
                 ) {
                     val message = "Unsubscribed from channel: ${sub?.channel}"
                     Log.d("Centrifuge", message)
-                    messageListener?.invoke("[${getCurrentTimestamp()}] $message")
+                    showMessage("[${getCurrentTimestamp()}] $message")
                 }
 
                 override fun onError(
@@ -124,7 +140,7 @@ class CentrifugoWsManager private constructor(
                 ) {
                     val message = "Subscription error: ${event?.message}"
                     Log.e("Centrifuge", message)
-                    messageListener?.invoke("[${getCurrentTimestamp()}] $message")
+
                 }
 
                 override fun onPublication(
@@ -135,12 +151,20 @@ class CentrifugoWsManager private constructor(
                         val message =
                             "Received message from ${sub?.channel}: $jsonString"
                         Log.d("Centrifuge", message)
-                        messageListener?.invoke("[${getCurrentTimestamp()}] $message")
+                        showMessage("[${getCurrentTimestamp()}] $message")
                     }
                 }
             })
         subscription.subscribe()
         subscriptions[channel] = subscription
+    }
+
+    private fun showMessage(message: String) {
+        RtmChannelMsg(
+            timestamp = System.currentTimeMillis(),
+            text = message,
+            type = "text"
+        ).let { messageListener?.invoke(it) }
     }
 
     fun unsubscribe(channel: String) {
@@ -150,14 +174,14 @@ class CentrifugoWsManager private constructor(
             subscriptions.remove(channel)
             client.removeSubscription(subscription)
         } else {
-            messageListener?.invoke("[${getCurrentTimestamp()}] Not subscribed to channel $channel")
+            showMessage("[${getCurrentTimestamp()}] Not subscribed to channel $channel")
         }
     }
 
     fun publishMessage(channel: String, message: String) {
         val subscription = subscriptions[channel]
         if (subscription == null) {
-            messageListener?.invoke("[${getCurrentTimestamp()}] Cannot publish: Not subscribed to the channel $channel")
+            showMessage("[${getCurrentTimestamp()}] Cannot publish: Not subscribed to the channel $channel")
             return
         }
 
@@ -166,11 +190,11 @@ class CentrifugoWsManager private constructor(
             if (e != null) {
                 val errorMessage = "Error publishing message: $e"
                 Log.e("Centrifuge", errorMessage)
-                messageListener?.invoke("[${getCurrentTimestamp()}] $errorMessage")
+                showMessage("[${getCurrentTimestamp()}] $errorMessage")
             } else {
                 val successMessage = "Message published to channel $channel"
                 Log.d("Centrifuge", successMessage)
-                messageListener?.invoke("[${getCurrentTimestamp()}] $successMessage")
+                showMessage("[${getCurrentTimestamp()}] $successMessage")
             }
         }
     }

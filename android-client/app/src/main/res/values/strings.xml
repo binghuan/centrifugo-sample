@@ -14,4 +14,7 @@
     <string name="websocket_address_and_token_required">WebSocket Address and Token required</string>
     <string name="connecting">Connecting...</string>
     <string name="subtoken">Subtoken</string>
+    <string name="send_icon_text"><![CDATA[&#xf1d8;]]></string>
+    <string name="enter_message">enter message</string>
+    <string name="send">Send</string>
 </resources>
