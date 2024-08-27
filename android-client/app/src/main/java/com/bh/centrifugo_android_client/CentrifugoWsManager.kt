@@ -100,12 +100,17 @@ class CentrifugoWsManager private constructor(
         messageListener = listener
     }
 
-    fun subscribe(channel: String, subToken: String) {
+    private fun checkSubscription(channel: String): Boolean {
         if (subscriptions.containsKey(channel)) {
             val message = "Already subscribed to $channel"
             showMessage("[${getCurrentTimestamp()}] $message")
-            return
+            return true
         }
+        return false
+    }
+
+    fun subscribe(channel: String, subToken: String) {
+        if (checkSubscription(channel)) return
 
         val subscription =
             client.newSubscription(channel, SubscriptionOptions().apply {
