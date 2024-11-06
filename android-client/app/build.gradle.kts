@@ -55,4 +55,7 @@ dependencies {
     implementation(libs.centrifuge.java)
     implementation(libs.material.v180)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
 }

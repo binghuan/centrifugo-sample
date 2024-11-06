@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.1"
 centrifuge-android = "0.36"
 centrifugeJava = "0.4.1"
 gson = "2.10.1"
@@ -15,11 +15,13 @@ activity = "1.9.1"
 constraintlayout = "2.1.4"
 materialVersion = "1.8.0"
 core = "1.13.1"
+retrofit = "2.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 centrifuge-android = { group = "com.github.centrifugal", name = "centrifuge-android", version.ref = "centrifuge-android" }
 centrifuge-java = { module = "io.github.centrifugal:centrifuge-java", version.ref = "centrifugeJava" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -31,6 +33,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material-v180 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

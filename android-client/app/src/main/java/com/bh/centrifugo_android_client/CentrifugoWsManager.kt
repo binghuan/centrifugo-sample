@@ -1,10 +1,14 @@
 package com.bh.centrifugo_android_client
 
 import android.util.Log
+import com.bh.centrifugo_android_client.api.RetrofitClient
+import com.bh.centrifugo_android_client.api.TokenResponse
 import com.bh.centrifugo_android_client.vo.RtmChannelMsg
 import io.github.centrifugal.centrifuge.Client
 import io.github.centrifugal.centrifuge.ConnectedEvent
 import io.github.centrifugal.centrifuge.ConnectingEvent
+import io.github.centrifugal.centrifuge.ConnectionTokenEvent
+import io.github.centrifugal.centrifuge.ConnectionTokenGetter
 import io.github.centrifugal.centrifuge.DisconnectedEvent
 import io.github.centrifugal.centrifuge.ErrorEvent
 import io.github.centrifugal.centrifuge.EventListener
@@ -16,7 +20,11 @@ import io.github.centrifugal.centrifuge.Subscription
 import io.github.centrifugal.centrifuge.SubscriptionErrorEvent
 import io.github.centrifugal.centrifuge.SubscriptionEventListener
 import io.github.centrifugal.centrifuge.SubscriptionOptions
+import io.github.centrifugal.centrifuge.TokenCallback
 import io.github.centrifugal.centrifuge.UnsubscribedEvent
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -36,6 +44,9 @@ class CentrifugoWsManager private constructor(
     }
 
     companion object {
+
+        const val TAG = "CentrifugoWsManager"
+
         @Volatile
         private var INSTANCE: CentrifugoWsManager? = null
 
@@ -45,26 +56,77 @@ class CentrifugoWsManager private constructor(
                     wsAddress, token
                 ).also { INSTANCE = it }
             }
-
-        fun getClient(): Client? = INSTANCE?.client
     }
 
+    private fun fetchToken(
+        userId: String,
+        onSuccess: ((String) -> Unit)? = null,
+        onError: ((String) -> Unit)? = null
+    ) {
+        Log.d(TAG, "Fetching token for user: $userId")
+
+        val call = RetrofitClient.instance.getToken(userId)
+        call.enqueue(object : Callback<TokenResponse> {
+            override fun onResponse(
+                call: Call<TokenResponse>, response: Response<TokenResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val token = response.body()?.token
+                    if (token != null) {
+                        Log.d(TAG, "fetchToken Token: $token")
+                        onSuccess?.invoke(token) // Call onSuccess if it's not null
+                    } else {
+                        Log.e(TAG, "fetchToken Token is null")
+                        onError?.invoke("Token is null") // Call onError if it's not null
+                    }
+                } else {
+                    Log.e(TAG, "fetchToken Failed to retrieve token")
+                    onError?.invoke("Failed to retrieve token") // Call onError if it's not null
+                }
+            }
+
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                Log.e(TAG, "fetchToken Error: ${t.message}")
+                onError?.invoke(
+                    t.message ?: "Unknown error"
+                ) // Call onError if it's not null
+            }
+        })
+    }
+
+
     private fun initClient() {
+
         val options = Options()
         options.token = token
+        options.tokenGetter = object : ConnectionTokenGetter() {
+            override fun getConnectionToken(
+                event: ConnectionTokenEvent?, cb: TokenCallback?
+            ) {
+                fetchToken("testuser", onSuccess = { newToken ->
+                    cb?.Done(null, newToken)
+                }, onError = { error ->
+                    cb?.Done(Exception(error), "")
+                })
+            }
+        }
+
+        Log.d(
+            TAG, "Creating client with address: $wsAddress, token=$token"
+        )
 
         client = Client(wsAddress, options, object : EventListener() {
             override fun onConnecting(
                 client: Client?, event: ConnectingEvent?
             ) {
                 val message = "Connecting: ${event?.reason}"
-                Log.d("Centrifuge", message)
+                Log.d(TAG, message)
                 statusListener?.invoke("[${getCurrentTimestamp()}] $message")
             }
 
             override fun onConnected(client: Client?, event: ConnectedEvent?) {
                 val message = "Connected"
-                Log.d("Centrifuge", message)
+                Log.d(TAG, message)
                 statusListener?.invoke("[${getCurrentTimestamp()}] $message")
             }
 
@@ -72,13 +134,13 @@ class CentrifugoWsManager private constructor(
                 client: Client?, event: DisconnectedEvent?
             ) {
                 val message = "Disconnected: ${event?.reason}"
-                Log.d("Centrifuge", message)
+                Log.d(TAG, message)
                 statusListener?.invoke("[${getCurrentTimestamp()}] $message")
             }
 
             override fun onError(client: Client?, event: ErrorEvent?) {
                 val message = "Error: ${event?.error}"
-                Log.e("Centrifuge", message)
+                Log.e(TAG, message)
                 statusListener?.invoke("[${getCurrentTimestamp()}] $message")
             }
         })
@@ -120,7 +182,7 @@ class CentrifugoWsManager private constructor(
                     sub: Subscription?, event: SubscribingEvent?
                 ) {
                     val message = "Subscribing to channel: ${sub?.channel}"
-                    Log.d("Centrifuge", message)
+                    Log.d(TAG, message)
                     showMessage("[${getCurrentTimestamp()}] $message")
                 }
 
@@ -128,7 +190,7 @@ class CentrifugoWsManager private constructor(
                     sub: Subscription?, event: SubscribedEvent?
                 ) {
                     val message = "Subscribed to channel: ${sub?.channel}"
-                    Log.d("Centrifuge", message)
+                    Log.d(TAG, message)
                     showMessage("[${getCurrentTimestamp()}] $message")
                 }
 
@@ -136,7 +198,7 @@ class CentrifugoWsManager private constructor(
                     sub: Subscription?, event: UnsubscribedEvent?
                 ) {
                     val message = "Unsubscribed from channel: ${sub?.channel}"
-                    Log.d("Centrifuge", message)
+                    Log.d(TAG, message)
                     showMessage("[${getCurrentTimestamp()}] $message")
                 }
 
@@ -144,7 +206,7 @@ class CentrifugoWsManager private constructor(
                     sub: Subscription?, event: SubscriptionErrorEvent?
                 ) {
                     val message = "Subscription error: ${event?.message}"
-                    Log.e("Centrifuge", message)
+                    Log.e(TAG, message)
 
                 }
 
@@ -155,7 +217,7 @@ class CentrifugoWsManager private constructor(
                         val jsonString = String(data, StandardCharsets.UTF_8)
                         val message =
                             "Received message from ${sub?.channel}: $jsonString"
-                        Log.d("Centrifuge", message)
+                        Log.d(TAG, message)
                         showMessage("[${getCurrentTimestamp()}] $message")
                     }
                 }
@@ -194,11 +256,11 @@ class CentrifugoWsManager private constructor(
         subscription.publish(jsonMessage.toByteArray()) { e, _ ->
             if (e != null) {
                 val errorMessage = "Error publishing message: $e"
-                Log.e("Centrifuge", errorMessage)
+                Log.e(TAG, errorMessage)
                 showMessage("[${getCurrentTimestamp()}] $errorMessage")
             } else {
                 val successMessage = "Message published to channel $channel"
-                Log.d("Centrifuge", successMessage)
+                Log.d(TAG, successMessage)
                 showMessage("[${getCurrentTimestamp()}] $successMessage")
             }
         }
