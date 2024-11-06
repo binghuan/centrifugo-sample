@@ -20,6 +20,8 @@ import io.github.centrifugal.centrifuge.Subscription
 import io.github.centrifugal.centrifuge.SubscriptionErrorEvent
 import io.github.centrifugal.centrifuge.SubscriptionEventListener
 import io.github.centrifugal.centrifuge.SubscriptionOptions
+import io.github.centrifugal.centrifuge.SubscriptionTokenEvent
+import io.github.centrifugal.centrifuge.SubscriptionTokenGetter
 import io.github.centrifugal.centrifuge.TokenCallback
 import io.github.centrifugal.centrifuge.UnsubscribedEvent
 import retrofit2.Call
@@ -177,6 +179,15 @@ class CentrifugoWsManager private constructor(
         val subscription =
             client.newSubscription(channel, SubscriptionOptions().apply {
                 token = subToken
+                tokenGetter = object : SubscriptionTokenGetter() {
+                    override fun getSubscriptionToken(
+                        event: SubscriptionTokenEvent?,
+                        cb: TokenCallback?
+                    ) {
+                        super.getSubscriptionToken(event, cb)
+
+                    }
+                }
             }, object : SubscriptionEventListener() {
                 override fun onSubscribing(
                     sub: Subscription?, event: SubscribingEvent?
